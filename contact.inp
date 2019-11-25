@@ -1,0 +1,237 @@
+/title, Test the Best Geometric Parameters
+/nopr
+
+! Geometric of model
+pi=acos(-1)
+l=38.800000e-3 				! Length
+w=12.200000e-3 				! Hight
+t=1e-3 						! Width
+r=1.5e-3 					! Radius
+h=0.5e-3 					! Hight of Rotor
+x=0.330000 					! Position of Rotor
+f=13						! Pre-Force
+p=f/l/t						! Pre-Pressure
+AMPSv=10
+FRESv=33200
+AMPCv=10
+FRECv=33200
+
+! Material properties
+eb=0.92e11 $ nub=0.33 $ denb=8500
+nut=0.35 $ dent=8050
+ct11=13.8e10 $ ct12=8.97e10 $ ct13=9.55e10
+ct22=13.8e10 $ ct23=9.55e10
+ct33=10.57e10
+ct44=1.75e10 $ ct55=1.75e10 $ ct66=2.39e10
+eps0=8.854e-12
+ep11=652 $ ep22=652 $ ep33=1330
+e13=-0.81 $ e23=-0.81 $ e33=11.8
+e52=12.3
+e61=12.3
+
+/PREP7
+
+! Material properties of PZT-PZN
+tb,anel,1,,,0     ! Anisotropic elasticity table
+tbda,1,ct11,ct12,ct13
+tbda,7,ct22,ct23
+tbda,12,ct33
+tbda,16,ct44 $ tbda,19,ct55 $ tbda,21,ct66
+
+tb,piez,1,,,0     ! Piezoelectric coefficient table
+tbda,3,e13 $ tbda,6,e23 $ tbda,9,e33
+tbda,14,e52
+tbda,16,e61
+
+emunit,epzro,eps0
+tb,dper,1,,,0     ! Permittivity table
+tbda,1,ep11,ep22,ep33
+
+mp,dens,1,dent
+
+! Material properties of Bronze
+mp,ex,2,eb $ mp,nuxy,2,nub $ mp,dens,2,denb
+
+! Allow ANSYS to choose best KEYOP's for 180x elements
+etcon,set
+
+! SIN function
+*DIM,_voltfreqS,TABLE,6,8,2,,,,0
+_voltfreqS(0,0,1)= 0, -999
+_voltfreqS(2,0,1)= 0.0
+_voltfreqS(3,0,1)= 0.0
+_voltfreqS(4,0,1)= 0.0
+_voltfreqS(5,0,1)= 0.0
+_voltfreqS(6,0,1)= 0.0
+_voltfreqS(0,1,1)= 1.0, 99, 0, 1, 1, 0, 0
+_voltfreqS(0,2,1)= 0.0,
+_voltfreqS(0,3,1)=   1,
+_voltfreqS(0,4,1)= 0.0,
+_voltfreqS(0,5,1)= 0.0,
+_voltfreqS(0,6,1)= 0.0,
+_voltfreqS(0,7,1)= 0.0,
+_voltfreqS(0,8,1)= 0.0,
+_voltfreqS(0,0,2)= -999, -999
+_voltfreqS(2,0,2)= 0.0
+_voltfreqS(3,0,2)= 0.0
+_voltfreqS(4,0,2)= 0.0
+_voltfreqS(5,0,2)= 0.0
+_voltfreqS(6,0,2)= 0.0
+_voltfreqS(0,1,2)= 1.0, -1, 0, 360, 0, 0, 0
+_voltfreqS(0,2,2)= 0.0, -2, 0, FRESv, 0, 0, -1
+_voltfreqS(0,3,2)=   1, -3, 0, 1, -1, 3, -2
+_voltfreqS(0,4,2)= 0.0, -1, 0, 1, -3, 3, 1
+_voltfreqS(0,5,2)= 0.0, -1, 9, 1, -1, 0, 0
+_voltfreqS(0,6,2)= 0.0, -2, 0, AMPSv, 0, 0, -1
+_voltfreqS(0,7,2)= 0.0, -3, 0, 1, -2, 3, -1
+_voltfreqS(0,8,2)= 0.0, 99, 0, 1, -3, 0, 0
+
+! COS function
+*DIM,_voltfreqC,TABLE,6,8,2,,,,0
+_voltfreqC(0,0,1)= 0, -999
+_voltfreqC(2,0,1)= 0.0
+_voltfreqC(3,0,1)= 0.0
+_voltfreqC(4,0,1)= 0.0
+_voltfreqC(5,0,1)= 0.0
+_voltfreqC(6,0,1)= 0.0
+_voltfreqC(0,1,1)= 1.0, 99, 0, 1, 1, 0, 0
+_voltfreqC(0,2,1)= 0.0,
+_voltfreqC(0,3,1)=   1,
+_voltfreqC(0,4,1)= 0.0,
+_voltfreqC(0,5,1)= 0.0,
+_voltfreqC(0,6,1)= 0.0,
+_voltfreqC(0,7,1)= 0.0,
+_voltfreqC(0,8,1)= 0.0,
+_voltfreqC(0,0,2)= -999, -999
+_voltfreqC(2,0,2)= 0.0
+_voltfreqC(3,0,2)= 0.0
+_voltfreqC(4,0,2)= 0.0
+_voltfreqC(5,0,2)= 0.0
+_voltfreqC(6,0,2)= 0.0
+_voltfreqC(0,1,2)= 1.0, -1, 0, 360, 0, 0, 0
+_voltfreqC(0,2,2)= 0.0, -2, 0, FRECv, 0, 0, -1
+_voltfreqC(0,3,2)=   1, -3, 0, 1, -1, 3, -2
+_voltfreqC(0,4,2)= 0.0, -1, 0, 1, -3, 3, 1
+_voltfreqC(0,5,2)= 0.0, -1, 10, 1, -1, 0, 0
+_voltfreqC(0,6,2)= 0.0, -2, 0, AMPCv, 0, 0, -1
+_voltfreqC(0,7,2)= 0.0, -3, 0, 1, -2, 3, -1
+_voltfreqC(0,8,2)= 0.0, 99, 0, 1, -3, 0, 0
+
+! Create geometry
+local,11 $ block,0,l,0,w,0,t $ x1=x*l $ x2=l-x*l $ cyl4,x1,w,r,r,0,180,t $ cyl4,x2,w,r,r,0,180,t $ vglue,all $ block,0,l,w+r,w+r+h,0,t
+
+! Assign the properties to geometry
+vsel,s,loc,y,0,w $ vatt,1,1,1 $ vsel,inve $ vatt,2,2,2
+
+! Spread the seed
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w $ lsel,r,loc,x,x1-r,x1+r $ lccat,all $ lsel,r,lcca $ lesize,all,,,4,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w $ lsel,r,loc,x,x2-r,x2+r $ lccat,all $ lsel,r,lcca $ lesize,all,,,4,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w $ lsel,r,loc,x,x1+r,x2-r,,0 $ lesize,all,,,7,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w $ lsel,r,loc,x,0,x1-r,,0 $ lesize,all,,,7,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w $ lsel,r,loc,x,x2+r,l,,0 $ lesize,all,,,7,0
+
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,x,0,0 $ lsel,r,loc,y,0,w $ lesize,all,,,8,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,x,l,l $ lsel,r,loc,y,0,w $ lesize,all,,,8,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,0,0 $ lesize,all,,,29,0
+
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w+r $ lsel,r,loc,x,x1-r,x1+r $ lsel,r,length,,pi*r $ lesize,all,,,8,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w+r $ lsel,r,loc,x,x2-r,x2+r $ lsel,r,length,,pi*r $ lesize,all,,,8,0
+lsel,all $ lsel,s,loc,z,0,t $ lsel,r,length,,t $ lesize,all,,,1,0
+
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,x,0,l $ lsel,r,loc,y,w+r+r/100,w+r+r/100 $ lesize,all,,,29,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w+r+r/100,w+r+r/100+h $ lsel,r,length,,h $ lesize,all,,,1,0
+lsel,all $ lsel,s,loc,z,0,t $ lsel,r,length,,t $ lesize,all,,,1,0
+
+! Define the element type and mesh
+et,1,226,1001 $ keyopt,1,2,1 $ et,2,186 $ keyopt,2,2,1
+vsel,all $ vsweep,all
+
+! Create the contact surface element
+vsel,all $ vsel,r,loc,y,w+r,w+r+h $ *get,vnumupper,volu,0,num,max $ vsel,all $ vsel,r,loc,y,w,w+r $ *get,vnumleft,volu,0,num,min $ *get,vnumright,volu,0,num,max $ vsel,all $ vsel,r,loc,y,0,w $ *get,vnumlower,volu,0,num,max 
+
+*set,cid,4 $ csys,0
+r,cid $ real,cid $ et,cid,174
+keyo,cid,10,0 $ keyo,cid,12,0 $ mp,mu,cid,0.2 $ keyo,cid,2,0 $ keyo,cid,4,0 $ keyo,cid,9,0 $ keyo,cid,7,0 $ rmod,cid,3,1. $ rmod,cid,5,0. $ rmod,cid,6,0. $ rmod,cid,10,0. $ rmod,cid,12,0.
+vsel,all $ asel,all $ asel,s,loc,y,w+r,w+r $ vsel,s,volu,,vnumleft $ asel,r,ext $ nsla,s,1 $ mat,cid $ type,cid $ secnum,cid $ esurf,all $ esel,all
+
+*set,tid,5 $ csys,0
+r,tid $ real,cid $ et,tid,170
+vsel,all $ asel,all $ asel,s,loc,y,w+r,w+r $ vsel,s,volu,,vnumupper $ asel,r,ext $ nsla,s,1 $ mat,tid $ type,tid $ secnum,tid $ esurf,all $ esel,all
+
+*set,cid,6 $ csys,0
+r,cid $ real,cid $ et,cid,174
+keyo,cid,10,0 $ keyo,cid,12,0 $ mp,mu,cid,0.2 $ keyo,cid,2,0 $ keyo,cid,4,0 $ keyo,cid,9,0 $ keyo,cid,7,0 $ rmod,cid,3,1. $ rmod,cid,5,0. $ rmod,cid,6,0. $ rmod,cid,10,0. $ rmod,cid,12,0.
+vsel,all $ asel,all $ asel,s,loc,y,w+r,w+r $ vsel,s,volu,,vnumright $ asel,r,ext $ nsla,s,1 $ mat,cid $ type,cid $ secnum,cid $ esurf,all $ esel,all
+
+*set,tid,7 $ csys,0
+r,tid $ real,cid $ et,tid,170
+vsel,all $ asel,all $ asel,s,loc,y,w+r,w+r $ vsel,s,volu,,vnumupper $ asel,r,ext $ nsla,s,1 $ mat,tid $ type,tid $ secnum,tid $ esurf,all $ esel,all
+
+! Create surface load element
+*set,localn,11 $ *set,lid,3
+local,localn,0,0.,0.,0.,0.,0.,0. $ csys,0
+r,lid $ real,lid $ et,lid,154 $ keyop,lid,2,1 $ keyop,lid,7,1 $ keyop,lid,11,2 $ nsel,all $ nsel,s,loc,y,0,0 $ mat,lid $ type,lid $ secnum,lid $ esys,localn $ esurf,all $ esel,all
+
+! Displacement boundary
+vsel,all $ asel,all $ nsel,all $ asel,s,loc,y,w+r,w+r $ vsel,s,volu,,vnumupper $ asel,r,ext $ nsla,s,1 $ d,all,uz,0 $ d,all,uy,0
+
+/solu
+!
+!  Step 1
+!
+antype,4 $ nlgeom,on $ kbc,1 $ eqsl,sparse,,,,,1 $ cntr,print,1 $ dmpoption,emat,no $ dmpoption,esav,no $ trnopt,full,,,,,nmk $ betad,5.e-008 $ tintp,,0.25,0.5,0.5 $ nldiag,cont,iter $ rescontrol,define,last,last,,dele
+
+! Pre-force load
+esel,s,type,,lid $ nsle
+sfe,all,1,pres,1,0. $ sfe,all,2,pres,1,p $ sfe,all,3,pres,1,0.
+nsel,all $ esel,all
+
+autots,off $ nsub,1000,1000,1000 $ time,3.e-005 $ timint,on
+outres,erase $ outres,all,none $ outres,loci,none $ outres,svar,none $ outres,nsol,10 $ outres,v,10 $ outres,a,10
+
+! Voltage boundary
+vsel,all $ asel,all $ asel,s,loc,z,0,0 $ vsel,s,volu,,vnumlower $ asel,r,ext $ nsla,s,1
+*get,_NUMMIN0,node,,num,min
+cp,next,volt,all
+d,_NUMMIN0,volt,0,0
+
+solve
+
+!
+!  Step 2
+!
+vsel,all $ asel,all $ asel,s,loc,z,t,t $ vsel,s,volu,,vnumlower $ asel,r,ext $ nsla,s,1 $ nsel,r,loc,y,0,0.8*w/2 $ nsel,r,loc,x,0,0.97*l/2 $ cm,vloads1,node
+vsel,all $ asel,all $ asel,s,loc,z,t,t $ vsel,s,volu,,vnumlower $ asel,r,ext $ nsla,s,1 $ nsel,r,loc,y,1.2*w/2,w+r $ nsel,r,loc,x,1.03*l/2,l+r $ cm,vloads2,node
+cmgrp,vloads,vloads1,vloads2
+cmsel,s,vloads
+*get,_NUMMINS,node,,num,min
+cp,next,volt,all
+! d,_NUMMINS,volt,0,0
+
+vsel,all $ asel,all $ asel,s,loc,z,t,t $ vsel,s,volu,,vnumlower $ asel,r,ext $ nsla,s,1 $ nsel,r,loc,y,0,0.8*w/2 $ nsel,r,loc,x,1.03*l/2,l+r $ cm,vloadc1,node
+vsel,all $ asel,all $ asel,s,loc,z,t,t $ vsel,s,volu,,vnumlower $ asel,r,ext $ nsla,s,1 $ nsel,r,loc,y,1.2*w/2,w+r $ nsel,r,loc,x,0,0.97*l/2 $ cm,vloadc2,node
+cmgrp,vloadc,vloadc1,vloadc2
+cmsel,s,vloadc
+*get,_NUMMINC,node,,num,min
+cp,next,volt,all
+! d,_NUMMINC,volt,0,0
+
+nsel,all
+d,_NUMMINS,volt,%_voltfreqC%,0
+d,_NUMMINC,volt,%_voltfreqS%,0
+
+autots,off $ nsub,16000,16000,16000 $ time,6.0541e-003 $ timint,on
+outres,erase $ outres,all,none $ outres,loci,none $ outres,svar,none $ outres,nsol,10 $ outres,v,10 $ outres,a,10
+
+solve
+
+/post26
+! nsel,all $ nsel,s,loc,z,t,t $ nsel,r,loc,y,w+0.95*r,w+r $ nsel,r,loc,x,0,0.5*l
+! *get,_NUMMINU,node,,num,min
+*set,_NUMMINU,100
+nsol,2,_NUMMINU,u,x,ux
+! LINES,1000
+PRVAR,2
+/AXLAB,x,UX
+/AXLAB,y,UY
+/show,png $ xvar,1 $ plvar,2

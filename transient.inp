@@ -1,0 +1,146 @@
+/title, Test the Best Geometric Parameters
+/nopr
+pi=acos(-1) $ l=38.800000e-3 $ w=12.200000e-3 $ t=1e-3 $ r=1.5e-3 $ x=0.330000 $ v=1 $ nsubs=30
+eb=0.92e11 $ nub=0.33 $ denb=8500
+nut=0.35 $ dent=8050
+ct11=13.8e10 $ ct12=8.97e10 $ ct13=9.55e10
+ct22=13.8e10 $ ct23=9.55e10
+ct33=10.57e10
+ct44=1.75e10 $ ct55=1.75e10 $ ct66=2.39e10
+eps0=8.854e-12
+ep11=652 $ ep22=652 $ ep33=1330
+e13=-0.81 $ e23=-0.81 $ e33=11.8
+e52=12.3
+e61=12.3
+/PREP7
+tb,anel,1,,,0     ! Anisotropic elasticity table
+tbda,1,ct11,ct12,ct13
+tbda,7,ct22,ct23
+tbda,12,ct33
+tbda,16,ct44 $ tbda,19,ct55 $ tbda,21,ct66
+tb,piez,1,,,0     ! Piezoelectric coefficient table
+tbda,3,e13 $ tbda,6,e23 $ tbda,9,e33
+tbda,14,e52
+tbda,16,e61
+emunit,epzro,eps0
+tb,dper,1,,,0     ! Permittivity table
+tbda,1,ep11,ep22,ep33
+mp,dens,1,dent
+mp,ex,2,eb $ mp,nuxy,2,nub $ mp,dens,2,denb
+local,11 $ block,0,l,0,w,0,t $ x1=x*l $ x2=l-x*l $ cyl4,x1,w,r,r,0,180,t $ cyl4,x2,w,r,r,0,180,t $ vglue,all
+vsel,s,loc,y,0,w $ vatt,1,1,1 $ vsel,inve $ vatt,2,2,2
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w $ lsel,r,loc,x,x1-r,x1+r $ lccat,all $ lsel,r,lcca $ lesize,all,,,4,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w $ lsel,r,loc,x,x2-r,x2+r $ lccat,all $ lsel,r,lcca $ lesize,all,,,4,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w $ lsel,r,loc,x,x1+r,x2-r,,0 $ lesize,all,,,7,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w $ lsel,r,loc,x,0,x1-r,,0 $ lesize,all,,,7,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w $ lsel,r,loc,x,x2+r,l,,0 $ lesize,all,,,7,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,x,0,0 $ lesize,all,,,8,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,x,l,l $ lesize,all,,,8,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,0,0 $ lesize,all,,,29,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w+r $ lsel,r,loc,x,x1-r,x1+r $ lsel,r,length,,pi*r $ lesize,all,,,8,0
+lsel,all $ lsel,s,loc,z,t,t $ lsel,r,loc,y,w,w+r $ lsel,r,loc,x,x2-r,x2+r $ lsel,r,length,,pi*r $ lesize,all,,,8,0
+lsel,all $ lsel,s,loc,z,0,t $ lsel,r,length,,t $ lesize,all,,,1,0
+et,1,226,1001 $ et,2,186
+vsel,all $ vsweep,all
+nsel,all $ nsel,s,loc,z,0,0 $ nsel,r,loc,y,0,w
+*get,_NUMMIN0,node,,num,min
+cp,next,volt,all
+d,_NUMMIN0,volt,0,0
+AMPv=1.000000e+00
+FREv=3.295000e+04
+*DIM,_voltfreq,TABLE,6,8,2,,,,0
+_voltfreq(0,0,1)= 0, -999
+_voltfreq(2,0,1)= 0.0
+_voltfreq(3,0,1)= 0.0
+_voltfreq(4,0,1)= 0.0
+_voltfreq(5,0,1)= 0.0
+_voltfreq(6,0,1)= 0.0
+_voltfreq(0,1,1)= 1.0, 99, 0, 1, 1, 0, 0
+_voltfreq(0,2,1)= 0.0,
+_voltfreq(0,3,1)=   1,
+_voltfreq(0,4,1)= 0.0,
+_voltfreq(0,5,1)= 0.0,
+_voltfreq(0,6,1)= 0.0,
+_voltfreq(0,7,1)= 0.0,
+_voltfreq(0,8,1)= 0.0,
+_voltfreq(0,0,2)= -999, -999
+_voltfreq(2,0,2)= 0.0
+_voltfreq(3,0,2)= 0.0
+_voltfreq(4,0,2)= 0.0
+_voltfreq(5,0,2)= 0.0
+_voltfreq(6,0,2)= 0.0
+_voltfreq(0,1,2)= 1.0, -1, 0, 360, 0, 0, 0
+_voltfreq(0,2,2)= 0.0, -2, 0, FREv, 0, 0, -1
+_voltfreq(0,3,2)=   1, -3, 0, 1, -1, 3, -2
+_voltfreq(0,4,2)= 0.0, -1, 0, 1, -3, 3, 1
+_voltfreq(0,5,2)= 0.0, -1, 9, 1, -1, 0, 0
+_voltfreq(0,6,2)= 0.0, -2, 0, AMPv, 0, 0, -1
+_voltfreq(0,7,2)= 0.0, -3, 0, 1, -2, 3, -1
+_voltfreq(0,8,2)= 0.0, 99, 0, 1, -3, 0, 0
+nsel,all $ nsel,s,loc,z,t,t $ nsel,r,loc,y,0,0.95*w/2 $ nsel,r,loc,x,0,0.95*l/2 $ cm,vloads1,node
+nsel,all $ nsel,s,loc,z,t,t $ nsel,r,loc,y,1.05*w/2,w $ nsel,r,loc,x,1.05*l/2,l $ cm,vloads2,node
+cmgrp,vloads,vloads1,vloads2
+cmsel,s,vloads
+*get,_NUMMINS,node,,num,min
+cp,next,volt,all
+d,_NUMMINS,volt,%_voltfreq%,0
+AMPCv=1.000000e+00
+FRECv=3.295000e+04
+*DIM,_voltfreqC,TABLE,6,8,2,,,,0
+_voltfreq(0,0,1)= 0, -999
+_voltfreq(2,0,1)= 0.0
+_voltfreq(3,0,1)= 0.0
+_voltfreq(4,0,1)= 0.0
+_voltfreq(5,0,1)= 0.0
+_voltfreq(6,0,1)= 0.0
+_voltfreq(0,1,1)= 1.0, 99, 0, 1, 1, 0, 0
+_voltfreq(0,2,1)= 0.0,
+_voltfreq(0,3,1)=   1,
+_voltfreq(0,4,1)= 0.0,
+_voltfreq(0,5,1)= 0.0,
+_voltfreq(0,6,1)= 0.0,
+_voltfreq(0,7,1)= 0.0,
+_voltfreq(0,8,1)= 0.0,
+_voltfreq(0,0,2)= -999, -999
+_voltfreq(2,0,2)= 0.0
+_voltfreq(3,0,2)= 0.0
+_voltfreq(4,0,2)= 0.0
+_voltfreq(5,0,2)= 0.0
+_voltfreq(6,0,2)= 0.0
+_voltfreq(0,1,2)= 1.0, -1, 0, 360, 0, 0, 0
+_voltfreq(0,2,2)= 0.0, -2, 0, FRECv, 0, 0, -1
+_voltfreq(0,3,2)=   1, -3, 0, 1, -1, 3, -2
+_voltfreq(0,4,2)= 0.0, -1, 0, 1, -3, 3, 1
+_voltfreq(0,5,2)= 0.0, -1, 10, 1, -1, 0, 0
+_voltfreq(0,6,2)= 0.0, -2, 0, AMPCv, 0, 0, -1
+_voltfreq(0,7,2)= 0.0, -3, 0, 1, -2, 3, -1
+_voltfreq(0,8,2)= 0.0, 99, 0, 1, -3, 0, 0
+nsel,all $ nsel,s,loc,z,t,t $ nsel,r,loc,y,0,0.95*w/2 $ nsel,r,loc,x,1.05*l/2,l $ cm,vloadc1,node
+nsel,all $ nsel,s,loc,z,t,t $ nsel,r,loc,y,1.05*w/2,w $ nsel,r,loc,x,0,0.95*l/2 $ cm,vloadc2,node
+cmgrp,vloadc,vloadc1,vloadc2
+cmsel,s,vloadc
+*get,_NUMMINC,node,,num,min
+cp,next,volt,all
+d,_NUMMINC,volt,%_voltfreqC%,0
+/solu
+antype,4 $ trnopt,full,,,,,nmk $ eqsl,sparse,,,,,1 $ kbc,1 $ tintp,0. $ rescontrol,define,last,last,,dele
+betad,5.000000e-09
+autots,off $ nsub,32000,32000,32000 $ time,6.069803e-03 $ timint,on
+outres,erase $ outres,all,none $ outres,loci,none $ outres,svar,none $ outres,nsol,all
+solve
+/post26
+nsel,all $ nsel,s,loc,z,t,t $ nsel,r,loc,y,w+0.95*r,w+r $ nsel,r,loc,x,0,0.5*l
+*get,_NUMMINU,node,,num,min
+nsol,2,_NUMMINU,u,x,ux
+nsol,3,_NUMMINU,u,y,uy
+LINES,32000
+PRVAR,2,3
+/AXLAB,x,UX
+/AXLAB,y,UY
+/show,png $ xvar,2 $ plvar,3
+/AXLAB,x,Frequency f (Hz)
+/AXLAB,y,UX
+/show,png $ xvar,1 $ plvar,2
+/AXLAB,x,Frequency f (Hz)
+/AXLAB,y,UY
+/show,png $ xvar,1 $ plvar,3
